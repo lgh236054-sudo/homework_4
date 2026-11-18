@@ -54,3 +54,27 @@ st_write(
   "output/world_gii_change_2010_2019.geojson",
   delete_dsn = TRUE
 )
+
+#plot
+
+library(tmap)
+
+tmap_mode("plot")
+qtm(World_GII,
+    fill="diff")
+
+breaks=c(0.0,0.2,0.4,0.6,0.8,1.0)
+diffbreaks=c(-0.4,-0.3,-0.2,-0.1,0,0.1)
+
+# preserve size not direction like WGS84
+World_GII = st_transform(World_GII, crs = "+proj=moll")
+
+# plot each map
+tm1 <- tm_shape(World_GII) + 
+  tm_polygons("x2019", 
+              breaks=breaks,
+              palette="PuBu")+
+  tm_legend(show=FALSE)+
+  tm_layout(frame=FALSE)+
+  tm_credits("(a)", position=c(0,0.85), size=1.5)
+
